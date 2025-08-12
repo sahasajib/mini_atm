@@ -1,8 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/sahasajib/mini_atm/cmd"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
-	fmt.Println("This is a simple Go program.")
+	cmd.Serve()
 }
