@@ -10,7 +10,7 @@ import (
 
 func AllUser(w http.ResponseWriter, r *http.Request){
 	var users []database.User
-	rows, err := database.InitDB().Query("SELECT id, name, password FROM users")
+	rows, err := database.DB.Query("SELECT id, name, password FROM users")
 	if err != nil {
 		http.Error(w, "Failed to retrieve users", http.StatusInternalServerError)
 		return

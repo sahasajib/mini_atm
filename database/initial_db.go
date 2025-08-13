@@ -7,15 +7,15 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
-func InitDB()*sql.DB{
+var DB *sql.DB
+func InitDB(){
 	var err error
 	connString := "host=localhost port=5432 user=postgres password=12345678 dbname=mini_atm sslmode=disable"
-	db, err = sql.Open("postgres", connString)
+	DB, err = sql.Open("postgres", connString)
     if err != nil{
 		log.Fatal("Failed to connect to the database:", err)
 	}
-    err = db.Ping()
+    err = DB.Ping()
 	if err != nil {
 		log.Fatal("Failed to ping the database:", err)
 	} 
@@ -25,13 +25,13 @@ func InitDB()*sql.DB{
 	createTableUser :=` CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
 		name VARCHAR(50) NOT NULL,
-		password VARCHAR(50) NOT NULL
+		password VARCHAR(100) NOT NULL
 	);`
-	_, err = db.Exec(createTableUser)
+	_, err = DB.Exec(createTableUser)
 	if err != nil {
 		log.Fatal("Failed to create users table:", err)
-	} else {
-		slog.Info("Users table created successfully")
 	}
-	return db
+	slog.Info("Users table created successfully")
+	
+
 }

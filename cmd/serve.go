@@ -15,6 +15,7 @@ func Serve(){
 	route.Handle("GET /atm", http.HandlerFunc(handler.GetAllTransactions))
 	route.Handle("POST /users", http.HandlerFunc(handler.CreateUser))
 	route.Handle("GET /users", http.HandlerFunc(handler.AllUser))
+	route.Handle("GET /users/{id}", http.HandlerFunc(handler.GetUser))
 
 	globalHandler := global_routes.GlobalRouter(route)
 	slog.Info("Starting server on port 8080")
