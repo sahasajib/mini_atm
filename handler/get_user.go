@@ -4,20 +4,13 @@ import (
 	"database/sql"
 	"log/slog"
 	"net/http"
-	"strconv"
-	"strings"
 
 	"github.com/sahasajib/mini_atm/database"
 	"github.com/sahasajib/mini_atm/util"
 )
 
 func GetUser(w http.ResponseWriter, r *http.Request){
-	ID := strings.Split(r.URL.Path, "/")
-	if len(ID) < 3 {
-		http.Error(w, "User ID is required", http.StatusBadRequest)
-		return
-	}
-	id, err := strconv.Atoi(ID[2])
+	id, err := util.ExtractIDFromPath(r)
 	if err != nil{
 		http.Error(w, "Please provide a valid user ID", http.StatusBadRequest)
 		return
