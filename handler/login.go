@@ -3,9 +3,11 @@ package handler
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/sahasajib/mini_atm/database"
+	"github.com/sahasajib/mini_atm/util"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -15,7 +17,7 @@ func Login(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
-
+	log.Printf("Received user: %+v", user)
 	if user.UserName == "" || user.Password == ""{
 		http.Error(w, "Username & Password required", http.StatusBadRequest)
 		return
@@ -24,7 +26,7 @@ func Login(w http.ResponseWriter, r *http.Request){
 
 	db := database.DB
 	var dbUser database.User
-	query := "SELECT id, name, password from users WHERE name=$1"
+	query := "SELECT id, username, password from users WHERE username=$1"
 	err := db.QueryRow(query, user.UserName).Scan(&dbUser.ID, &dbUser.UserName, &dbUser.Password)
 	if err != nil{
 		if err == sql.ErrNoRows{
@@ -41,7 +43,7 @@ func Login(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Invalid password", http.StatusUnauthorized)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Welcome, " + dbUser.UserName + "! 🎉"))
+	response := database.Messages{Message: "Welcome, " + dbUser.UserName + "! 🎉"}
+	util.SendDate(w, response, http.StatusAccepted)
 
 }

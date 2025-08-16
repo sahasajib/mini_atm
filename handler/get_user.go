@@ -20,7 +20,7 @@ func GetUser(w http.ResponseWriter, r *http.Request){
 
 	var user database.User
 	
-	query := "SELECT id, name, password FROM users WHERE id = $1"
+	query := "SELECT id, username, password FROM users WHERE id = $1"
 	slog.Info("Executing query", "query", query, "id", id)
 
 	err = db.QueryRow(query, id).Scan(&user.ID, &user.UserName, &user.Password)

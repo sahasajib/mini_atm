@@ -6,3 +6,6 @@ type User struct {
 	Password string `json:"password"`
 }
 
+type Messages struct{
+	Message string `json:"message"`
+}

@@ -23,7 +23,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	query :=  `INSERT INTO users (name, password) VALUES ($1, $2) RETURNING id`
+	query :=  `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`
 	err = database.DB.QueryRow(query, user.UserName, string(HashPassword)).Scan(&user.ID)
 	if err != nil{
 		http.Error(w, err.Error(), http.StatusInternalServerError)
