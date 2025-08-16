@@ -19,7 +19,7 @@ func AllUser(w http.ResponseWriter, r *http.Request){
 
 	for rows.Next(){
 		var user database.User
-		err := rows.Scan(&user.ID, &user.Name, &user.Password)
+		err := rows.Scan(&user.ID, &user.UserName, &user.Password)
 		if err != nil {
 			http.Error(w, "Failed to scan user", http.StatusInternalServerError)
 			return

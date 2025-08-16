@@ -21,7 +21,7 @@ func DelteUser(w http.ResponseWriter, r *http.Request) {
 	// Check if user exists
 	var user database.User
 	err = db.QueryRow("SELECT id, name, password FROM users WHERE id = $1", id).
-		Scan(&user.ID, &user.Name, &user.Password)
+		Scan(&user.ID, &user.UserName, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.Error(w, "User not found", http.StatusNotFound)

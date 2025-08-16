@@ -29,7 +29,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	db := database.DB
 	// Check if user exists
 	query := "UPDATE users SET name=$1, password=$2 WHERE id=$3"
-	res, err := db.Exec(query, user.Name, HashPassword, id)
+	res, err := db.Exec(query, user.UserName, HashPassword, id)
 	if err != nil {
 		http.Error(w, "Faild to update data", http.StatusInternalServerError)
 		return
