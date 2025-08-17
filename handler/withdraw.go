@@ -30,6 +30,10 @@ func Withdraw(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "Amount must be positive", http.StatusBadRequest)
 		return
 	}
+	if requestMoney.Amount > 10000{
+		http.Error(w, "Amoun withdral amount 10000", http.StatusBadRequest)
+		return
+	}
 	db := database.DB
 	
 	tx, err := db.Begin()

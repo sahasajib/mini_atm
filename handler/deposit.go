@@ -10,38 +10,43 @@ import (
 	"github.com/sahasajib/mini_atm/util"
 )
 
-func Deposit(w http.ResponseWriter, r *http.Request){
+func Deposit(w http.ResponseWriter, r *http.Request) {
 	usernameVal := r.Context().Value("username")
 	username, ok := usernameVal.(string)
 	if !ok {
 		http.Error(w, "Unautorized: missing username", http.StatusUnauthorized)
 		return
 	}
-	
+
 	log.Printf("user name %s", username)
 
 	var requestMoney database.TransactionRequst
 
-	if err := json.NewDecoder(r.Body).Decode(&requestMoney); err != nil{
+	if err := json.NewDecoder(r.Body).Decode(&requestMoney); err != nil {
 		log.Printf("Error decoding Json: %v", err)
 		http.Error(w, "Invalid request body", http.StatusBadGateway)
 		return
 	}
-	if requestMoney.Amount <= 0{
+	if requestMoney.Amount <= 0 {
 		http.Error(w, "Amount must be positive", http.StatusBadRequest)
 		return
-	} 
+	}
+
+	if requestMoney.Amount > 10000 {
+		http.Error(w, "Amoun deposit amount 10000", http.StatusBadRequest)
+		return
+	}
 
 	db := database.DB
 	tx, err := db.Begin()
-	if err != nil{
+	if err != nil {
 		log.Printf("Error starting transaction: %v", err)
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		return
 	}
 	defer tx.Rollback()
 
-	var userID int 
+	var userID int
 	err = tx.QueryRow("SELECT id FROM users WHERE username = $1", username).Scan(&userID)
 	if err != nil {
 		log.Printf("Error fatching userID: %v", err)
@@ -60,7 +65,7 @@ func Deposit(w http.ResponseWriter, r *http.Request){
 	query := `INSERT INTO transection (user_id, transactionInfo, balance, total_balance) VALUES ($1, $2, $3, $4) RETURNING id`
 	var id int
 	err = tx.QueryRow(query, userID, "Deposit", requestMoney.Amount, newBalance).Scan(&id)
-	if err != nil{
+	if err != nil {
 		log.Printf("Error inserting transaction: %v", err)
 		http.Error(w, "Server error", http.StatusInternalServerError)
 	}
