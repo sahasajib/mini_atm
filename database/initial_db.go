@@ -34,11 +34,11 @@ func InitDB(){
 	slog.Info("Users table created successfully")
 
 	//trangiction table
-	createTableTransection :=` CREATE TABLE IF NOT EXISTS Transection (
+	createTableTransection :=` CREATE TABLE IF NOT EXISTS transection (
 		id SERIAL PRIMARY KEY,
 		user_id INT NOT NULL,
 		transactionInfo VARCHAR(100) DEFAULT 'Main Balance',
-		blance DECIMAL(10,2) DEFAULT 0.00,
+		balance DECIMAL(10,2) DEFAULT 0.00,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 	);`

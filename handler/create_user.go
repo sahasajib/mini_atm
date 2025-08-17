@@ -30,5 +30,5 @@ func CreateUser(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	user.Password = "" // Clear password before sending response
-	util.SendDate(w, user, http.StatusCreated)
+	util.SendData(w, user, http.StatusCreated)
 }

@@ -7,5 +7,5 @@ import (
 )
 
 func GetAllTransactions(w http.ResponseWriter, r *http.Request) {
-	util.SendDate(w, "all transactions", http.StatusOK)
+	util.SendData(w, "all transactions", http.StatusOK)
 }

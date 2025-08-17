@@ -9,7 +9,7 @@ import (
 	"github.com/sahasajib/mini_atm/middleware"
 )
 
-func Serve(){
+func Serve() {
 	manager := middleware.NewManager()
 	manager.Use(middleware.Logger)
 	route := http.NewServeMux()
@@ -19,7 +19,7 @@ func Serve(){
 	slog.Info("Starting server on port 8080")
 
 	err := http.ListenAndServe(":8080", globalHandler)
-	if err != nil{
+	if err != nil {
 		fmt.Println("Error starting server:", err)
 	}
 }

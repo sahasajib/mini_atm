@@ -43,5 +43,5 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Delete user
 	user.ID = id
-	util.SendDate(w, user, http.StatusOK)
+	util.SendData(w, user, http.StatusOK)
 }

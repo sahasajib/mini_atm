@@ -30,5 +30,5 @@ func AllUser(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "No users found", http.StatusNotFound)
 		return
 	}
-	util.SendDate(w, users, http.StatusOK)
+	util.SendData(w, users, http.StatusOK)
 }

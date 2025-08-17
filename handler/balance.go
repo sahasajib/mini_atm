@@ -2,37 +2,52 @@ package handler
 
 import (
 	"database/sql"
-	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/sahasajib/mini_atm/database"
-	
+	"github.com/sahasajib/mini_atm/util"
 )
 
 func Balance(w http.ResponseWriter, r *http.Request){
-	username := r.Context().Value("username").(string)
+	usernameVal := r.Context().Value("username")
+	username, ok := usernameVal.(string)
+	if !ok {
+		http.Error(w, "Unautorized: missing username", http.StatusUnauthorized)
+		return
+	}
+	
+	log.Printf("user name %s", username)
 
 	db := database.DB
 
 	var balance float64
-	query := `SELECT balance FROM transactions
-	          WHERE username = $1
-	          ORDER BY created_at DESC
-	          LIMIT 1`
-	err := db.QueryRow(query, username).Scan(&balance)
+	var userID int
+	err := db.QueryRow("SELECT id FROM users WHERE username = $1", username).Scan(&userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			balance = 0.00
-		} else {
-			http.Error(w, "Failed to fetch balance", http.StatusInternalServerError)
+			http.Error(w, "User not found", http.StatusUnauthorized)
 			return
 		}
+		log.Printf("Database error (fetching user_id): %v", err)
+		http.Error(w, "Failed to fetch balance", http.StatusInternalServerError)
+		return
 	}
 
-	resp := map[string]interface{}{
-		"username": username,
-		"balance":  balance,
+	// Query total balance from transection table
+	
+	query := `SELECT COALESCE(SUM(balance), 0) FROM transection WHERE user_id = $1`
+	err = db.QueryRow(query, userID).Scan(&balance)
+	if err != nil {
+		log.Printf("Database error (fetching balance): %v", err)
+		http.Error(w, "Failed to fetch balance", http.StatusInternalServerError)
+		return
 	}
 
-	json.NewEncoder(w).Encode(resp)
+	resp := database.BalanceResponse{
+		UserName: username,
+		Balance:  balance,
+	}
+
+	util.SendData(w, resp, http.StatusOK)
 }

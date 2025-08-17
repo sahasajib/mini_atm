@@ -12,6 +12,6 @@ type Messages struct{
 }
 
 type BalanceResponse struct{
-	UserName string `json:"username`
+	UserName string `json:"username"`
 	Balance float64 `json: "balance"`
 }

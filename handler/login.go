@@ -57,7 +57,6 @@ func Login(w http.ResponseWriter, r *http.Request){
     Value:    token,
     Expires:  time.Now().Add(24 * time.Hour),
     HttpOnly: true,
-    Secure:   false, // production এ true রাখো HTTPS এ
     Path:     "/",
 })
 
@@ -71,6 +70,6 @@ func Login(w http.ResponseWriter, r *http.Request){
 			"Logout",
 		},
 	}
-	util.SendDate(w, response, http.StatusAccepted)
+	util.SendData(w, response, http.StatusAccepted)
 
 }

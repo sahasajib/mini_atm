@@ -33,6 +33,6 @@ func GetUser(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	
-	util.SendDate(w, user, http.StatusOK)
+	util.SendData(w, user, http.StatusOK)
 
 }
