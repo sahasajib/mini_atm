@@ -21,7 +21,7 @@ func InitDB(){
 	} 
 	slog.Info("Database connection established successfully")
 
-
+	//user table
 	createTableUser :=` CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
 		username VARCHAR(50) NOT NULL,
@@ -32,6 +32,21 @@ func InitDB(){
 		log.Fatal("Failed to create users table:", err)
 	}
 	slog.Info("Users table created successfully")
+
+	//trangiction table
+	createTableTransection :=` CREATE TABLE IF NOT EXISTS Transection (
+		id SERIAL PRIMARY KEY,
+		user_id INT NOT NULL,
+		transactionInfo VARCHAR(100) DEFAULT 'Main Balance',
+		blance DECIMAL(10,2) DEFAULT 0.00,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+	);`
+	_, err = DB.Exec(createTableTransection)
+	if err != nil {
+		log.Fatal("Failed to create Transection table:", err)
+	}
+	slog.Info("Transection table created successfully")
 	
 
 }

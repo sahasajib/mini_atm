@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/sahasajib/mini_atm/database"
 	"github.com/sahasajib/mini_atm/util"
@@ -23,6 +24,8 @@ func Login(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
+	
+
 
 	db := database.DB
 	var dbUser database.User
@@ -36,14 +39,38 @@ func Login(w http.ResponseWriter, r *http.Request){
 		http.Error(w, "server error", http.StatusInternalServerError)
 		return
 	}
-
+	
 
 	err = bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(user.Password))
 	if err != nil{
 		http.Error(w, "Invalid password", http.StatusUnauthorized)
 		return
 	}
-	response := database.Messages{Message: "Welcome, " + dbUser.UserName + "! 🎉"}
+
+	token, err := util.GenerateJWT(dbUser.ID, dbUser.UserName)
+	if err != nil{
+		http.Error(w, "Could not generate token", http.StatusInternalServerError)
+	}
+	//log.Printf("Generated JWT token: %s",token)
+	http.SetCookie(w, &http.Cookie{
+    Name:     "jwt_token",
+    Value:    token,
+    Expires:  time.Now().Add(24 * time.Hour),
+    HttpOnly: true,
+    Secure:   false, // production এ true রাখো HTTPS এ
+    Path:     "/",
+})
+
+	response := database.Messages{
+		Message: "Welcome, " + dbUser.UserName + "! 🎉",
+		Options: []string{
+			"Check Balance",
+			"Deposit Money",
+			"Withdraw Money",
+			"View Transactions",
+			"Logout",
+		},
+	}
 	util.SendDate(w, response, http.StatusAccepted)
 
 }
