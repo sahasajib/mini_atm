@@ -19,6 +19,7 @@ func InitRoute(route *http.ServeMux, manager *middleware.Manager){
 	route.Handle("POST /user", manager.With(http.HandlerFunc(handler.Login)))
 	route.Handle("GET /user/me/balance", manager.With(middleware.JWTMiddleware(http.HandlerFunc(handler.Balance))))
 	route.Handle("POST /user/me/deposit", manager.With(middleware.JWTMiddleware(http.HandlerFunc(handler.Deposit))))
+	route.Handle("POST /user/me/withdraw", manager.With(middleware.JWTMiddleware(http.HandlerFunc(handler.Withdraw))))
 
 	route.Handle("POST /user/me/logout", manager.With(http.HandlerFunc(handler.Logout)))
 }

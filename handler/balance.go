@@ -36,12 +36,16 @@ func Balance(w http.ResponseWriter, r *http.Request){
 
 	// Query total balance from transection table
 	
-	query := `SELECT COALESCE(SUM(balance), 0) FROM transection WHERE user_id = $1`
+	query := `SELECT total_balance FROM transection WHERE user_id = $1 ORDER BY id DESC LIMIT 1`
 	err = db.QueryRow(query, userID).Scan(&balance)
 	if err != nil {
-		log.Printf("Database error (fetching balance): %v", err)
-		http.Error(w, "Failed to fetch balance", http.StatusInternalServerError)
-		return
+		if err == sql.ErrNoRows {
+			balance = 0.00 // No transactions yet
+		} else {
+			log.Printf("Database error (fetching total_balance): %v", err)
+			http.Error(w, "Failed to fetch balance", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	resp := database.BalanceResponse{

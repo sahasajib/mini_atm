@@ -39,6 +39,7 @@ func InitDB(){
 		user_id INT NOT NULL,
 		transactionInfo VARCHAR(100) DEFAULT 'Main Balance',
 		balance DECIMAL(10,2) DEFAULT 0.00,
+		total_balance DECIMAL(10,2) DEFAULT 0.00,
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 	);`
