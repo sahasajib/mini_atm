@@ -88,7 +88,7 @@ func Withdraw(w http.ResponseWriter, r *http.Request){
 	}
 
 	// Send response
-	response := database.Messages{Message: "Withdraw successful!"}
+	response := database.Resposes{Response: "Withdraw successful!"}
 	util.SendData(w, response, http.StatusCreated)
 
 }

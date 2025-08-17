@@ -72,6 +72,6 @@ func Deposit(w http.ResponseWriter, r *http.Request){
 	}
 
 	// Send response
-	response := database.Messages{Message: "Deposit successful!"}
+	response := database.Resposes{Response: "Deposit successful!"}
 	util.SendData(w, response, http.StatusCreated)
 }

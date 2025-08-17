@@ -10,6 +10,9 @@ type Messages struct{
 	Message string `json:"message"`
 	Options []string `json:"option"`
 }
+type Resposes struct{
+	Response string `json:"response"`
+}
 
 type BalanceResponse struct{
 	UserName string `json:"username"`
@@ -19,4 +22,10 @@ type BalanceResponse struct{
 
 type TransactionRequst struct {
 	Amount float64 `json:"amount"`
+}
+
+type TransectionHistory struct{
+	TransectionInfo string `json:"transection"`
+	Amount          float64 `json:"amount"` 
+	CreatedAt       string  `json:"created_at,omitempty"`
 }
