@@ -13,5 +13,10 @@ type Messages struct{
 
 type BalanceResponse struct{
 	UserName string `json:"username"`
-	Balance float64 `json: "balance"`
+	Balance float64 `json:"balance"`
+}
+
+
+type TransactionRequst struct {
+	Amount float64 `json:"amount"`
 }
