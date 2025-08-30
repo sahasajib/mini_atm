@@ -1,10 +1,10 @@
-package cmd
+package rest
 
 import (
 	"net/http"
 
-	"github.com/sahasajib/mini_atm/handler"
-	"github.com/sahasajib/mini_atm/middleware"
+	"github.com/sahasajib/mini_atm/rest/middleware"
+	"github.com/sahasajib/mini_atm/rest/handler"
 )
 
 func InitRoute(route *http.ServeMux, manager *middleware.Manager){
